@@ -1,0 +1,23 @@
+{
+  "name": "npc-world-tiktok-live",
+  "version": "1.0.0",
+  "description": "NPC WORLD - Simulação 3D viva de cidade para TikTok LIVE",
+  "type": "module",
+  "scripts": {
+    "dev": "node runner.js",
+    "start": "node runner.js",
+    "server": "node server/index.js",
+    "dev:server": "node --watch server/index.js",
+    "dev:client": "vite client --port 5173",
+    "build": "vite build client",
+    "test": "node --test test/*.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "three": "^0.165.0",
+    "ws": "^8.17.0"
+  },
+  "devDependencies": {
+    "vite": "^5.2.11"
+  }
+}

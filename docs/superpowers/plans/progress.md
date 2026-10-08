@@ -1,0 +1,27 @@
+# SDD ledger — plan: docs/superpowers/plans/2026-10-08-npc-world-implementation.md
+Ruling: sem usar git — conforme instrução direta do usuário — sem comandos de git, commits ou worktrees.
+Pre-flight: Interfaces validadas entre Backend, SQLite, WebSocket, 3D Engine e HUD.
+Task 1: complete (dependências instaladas, configurações validadas, tests: node test/smoke_test.js → 4/4 pass)
+Task 2: complete (SQLite schema e operações implementadas com node:sqlite, tests: node test/db_test.js → 8/8 pass)
+Task 3: complete (Servidor Express, WebSocket Hub e endpoints REST implementados, tests: node test/ws_test.js → 4/4 pass)
+Task 4: complete (Sanitizador, MockFeeder e TikTokConnector implementados, tests: node test/tiktok_feeder_test.js → 7/7 pass)
+Task 5: complete (ChainEventEngine e EventDirector autônomo com ritmo e cadeias reativas, tests: node test/event_director_test.js → 4/4 pass, suite 27/27)
+Task 6: complete (Setup do Three.js PBR, PostProcessingComposer com Bloom e Vite validado via build, tests: npx vite build client → 18 modules transformed, built in 1.98s)
+Task 7: complete (Construtor 3D da cidade: avenidas, quarteirões, banco, hospital, delegacia, posto, restaurante, praça com chafariz, postes, semáforos e grafo de caminhos, tests: npx vite build client → 22 modules transformed, built in 2.12s)
+Task 8: complete (Ciclo Dia/Noite 24h contínuo, luzes urbanas automáticas ao anoitecer, e clima dinâmico com partículas de chuva em pool, tempestade com raios e neblina, tests: npx vite build client → 24 modules transformed, built in 2.50s)
+Task 9: complete (Frota de veículos com navegação inteligente em waypoints, semáforos, viaturas policiais com giroflex estroboscópico, ambulâncias e perseguições, tests: npx vite build client → 26 modules transformed, built in 2.49s)
+Task 10: complete (Simulação de NPCs vivos: membros articulados com caminhada procedural, necessidades de fome/energia/trabalho, rotinas e moradores da LIVE com crachá 3D suspenso, tests: npx vite build client → 29 modules transformed, built in 2.35s)
+Task 11: complete (Diretor de câmeras dinâmicas: panorâmica orbital, perseguição veicular chase-cam, follow-cam de morador e cinemática com suavização lerp, tests: npx vite build client → 31 modules transformed, built in 3.23s)
+Task 12: complete (Eventos épicos: queda cinematográfica de meteoro com onda de choque e pânico coletivo, corrida clandestina, festival com fogos, apagão e roubo ao banco, tests: node test/epic_events_test.js → 3/3 pass)
+Task 13: complete (Engine de áudio procedural com Web Audio API: sirene policial modulada, chuva e vento via ruído branco, estrondo de explosão, buzinas e notificações, tests: npx vite build client → 33 modules transformed, built in 2.65s)
+Task 14: complete (HUD Glassmorphism moderno com feed de live e leaderboard, cliente WebSocket com reconexão exponencial, modo OBS e painel Admin/Dev interativo com F2, tests: npx vite build client → 36 modules transformed, built in 1.90s)
+Task 15: complete (Suíte de testes de integração E2E, documentação completa em README.md, script de execução Windows start.bat e build de produção validado, tests: npm test → 35/35 pass, npm run build → success)
+Final: all 15 tasks complete and verified.
+Refinement: botões do DevPanel com execução direta imediata, IA de pedestres em calçadas perimetrais sem atravessar prédios, parada de veículos em semáforos vermelhos e prevenção de colisões veiculares frontais implementadas.
+Refinement 2: Evento Lendário Galáxia desvinculado do Meteoro com mecânica própria: vórtice cósmico estelar giratório 3D, céu índigo, chuva de poeira estelar cintilante, áudio de frequências celestiais harmônicas e levitação anti-gravidade de cidadãos.
+Refinement 3: Corrida clandestina totalmente reformulada: grid de largada lado a lado na avenida central (-52, 0, 2.0 e 5.0), ignoreTraffic ativado para furar sinal vermelho e não parar atrás de carros lentos, som de pneu cantando (tire screech), velocidade de 95 km/h (26 m/s), viatura policial em perseguição colada na traseira e câmera Chase Cam focando a arrancada.
+Refinement 4: Iluminação noturna recalibrada para estética urbana cyberpunk (luz ambiente 0.45 em ciano, luar 0.75, céu azul índigo #0f172a, neblina suave 0.004, eliminando escuridão total), restauração automática do céu após eventos, botão de alternância imediata ☀️/🌙 Dia/Noite no painel F2 e proteção do loop de renderização com try/catch.
+Refinement 5: Correção de escopo de forwardX/forwardZ em Vehicle.update que causava travamento do loop de animação ao atualizar veículos.
+Refinement 6: Deslocamento de edifícios periféricos para fora dos loops de trânsito (eliminando colisão de carros com prédios), I.A ativa de perseguição policial (cop.pursuitTarget segue dinamicamente os carros de corrida) e sistema de atropelamento físico com ragdoll/queda ao chão dos pedestres e despacho de ambulância.
+Refinement 7: Correção da I.A de perseguição da viatura policial: segue rigorosamente os waypoints da malha asfáltica em alta velocidade atrás do suspeito em vez de cortar em linha reta diagonal através dos prédios.
+Refinement 8: Expansão da cidade para grande metrópole 3D de 300x300m com 9 setores (arranha-céus corporativos, shopping center, residenciais, praça expandida, avenidas largas), show coreografado de 14 fogos de artifício com som de lançamento/assobio e explosão com iluminação dinâmica, e compressor de áudio com trava de eventos (isEventBusy) para eliminar sobreposição e confusão sonora.

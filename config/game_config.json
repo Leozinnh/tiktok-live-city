@@ -1,0 +1,63 @@
+{
+  "server": {
+    "port": 3000,
+    "host": "0.0.0.0"
+  },
+  "simulation": {
+    "dayNightCycleMinutes": 12,
+    "initialHour": 9.5,
+    "eventDirectorIntervalSeconds": 180,
+    "eventDirectorMinCalmSeconds": 120,
+    "economy": {
+      "baseSalary": 50,
+      "foodCost": 15,
+      "itemCost": 25,
+      "initialResidentCash": 250
+    }
+  },
+  "graphics": {
+    "defaultPreset": "HIGH",
+    "presets": {
+      "LOW": {
+        "maxNPCs": 25,
+        "maxVehicles": 8,
+        "shadows": false,
+        "bloom": false,
+        "antialiasing": false,
+        "pixelRatio": 1
+      },
+      "MEDIUM": {
+        "maxNPCs": 40,
+        "maxVehicles": 12,
+        "shadows": true,
+        "shadowMapSize": 1024,
+        "bloom": true,
+        "antialiasing": true,
+        "pixelRatio": 1
+      },
+      "HIGH": {
+        "maxNPCs": 60,
+        "maxVehicles": 18,
+        "shadows": true,
+        "shadowMapSize": 2048,
+        "bloom": true,
+        "antialiasing": true,
+        "pixelRatio": 1.5
+      },
+      "ULTRA": {
+        "maxNPCs": 90,
+        "maxVehicles": 25,
+        "shadows": true,
+        "shadowMapSize": 4096,
+        "bloom": true,
+        "antialiasing": true,
+        "pixelRatio": 2
+      }
+    }
+  },
+  "audio": {
+    "masterVolume": 0.65,
+    "sfxVolume": 0.8,
+    "ambientVolume": 0.5
+  }
+}

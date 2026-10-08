@@ -1,0 +1,74 @@
+{
+  "gifts": {
+    "Rose": {
+      "action": "spawn_resident",
+      "tier": "common",
+      "value": 1,
+      "description": "Gera um novo morador ou bonifica morador existente"
+    },
+    "Doughnut": {
+      "action": "feed_city",
+      "tier": "uncommon",
+      "value": 30,
+      "description": "Abastece mercados e restaurantes da cidade"
+    },
+    "Cap": {
+      "action": "spawn_police",
+      "tier": "uncommon",
+      "value": 99,
+      "description": "Despacha patrulha policial extra"
+    },
+    "PaperCrane": {
+      "action": "weather_rain",
+      "tier": "uncommon",
+      "value": 99,
+      "description": "Inicia chuva fresca na cidade"
+    },
+    "MoneyGun": {
+      "action": "economy_boom",
+      "tier": "rare",
+      "value": 500,
+      "description": "Chuva de dinheiro e bonificação para a economia"
+    },
+    "Confetti": {
+      "action": "city_festival",
+      "tier": "rare",
+      "value": 1000,
+      "description": "Inicia festival urbano com fogos de artifício na praça"
+    },
+    "Galaxy": {
+      "action": "galaxy_cosmic",
+      "tier": "legendary",
+      "value": 10000,
+      "description": "Vórtice Cósmico Galáctico e Gravidade Zero"
+    },
+    "Lion": {
+      "action": "city_blackout",
+      "tier": "legendary",
+      "value": 29999,
+      "description": "Apagão geral de energia elétrica na cidade"
+    }
+  },
+  "commands": {
+    "chuva": "weather_rain",
+    "tempestade": "weather_storm",
+    "sol": "weather_clear",
+    "neblina": "weather_fog",
+    "policia": "spawn_police",
+    "ambulancia": "spawn_ambulance",
+    "corrida": "illegal_race",
+    "festa": "city_festival",
+    "zumbi": "zombie_outbreak",
+    "meteoro": "meteor_strike",
+    "apagao": "city_blackout",
+    "roubo": "bank_robbery",
+    "rosa": "spawn_resident",
+    "flor": "spawn_resident"
+  },
+  "likeMilestones": {
+    "100": "boost_speed",
+    "500": "spawn_resident_batch",
+    "1000": "city_festival",
+    "5000": "meteor_strike"
+  }
+}
