@@ -6,44 +6,56 @@ Uma simulação 3D viva, visualmente impressionante e com estética de jogo come
 
 ## 🌟 Principais Características
 
+* **Metrópole 3D Expandida (300 x 300 Metros, 9 Setores Urbanos):**
+  * **Setor Noroeste (Centro Financeiro):** Grandes arranha-céus corporativos com a **Torre Metropolitan (52 metros de altura)** com barbatanas em neon ciano e espigão com luz de topo, ao lado do **Banco Central NPC** com colunas clássicas e letreiro dourado.
+  * **Setor Norte (Shopping Plaza):** Shopping center moderno com marquise de vidro e **outdoor eletrônico luminoso**.
+  * **Setor Nordeste (Condomínios & Brownstones):** Fileira de sobrados elegantes e torres residenciais envidraçadas.
+  * **Setor Oeste (Complexo Cívico):** Delegacia de polícia com pátio de viaturas e Hospital Geral Municipal com heliponto e luzes de emergência.
+  * **Setor Centro (Grand Central Park):** Praça 4x maior com chafariz de pedra, alamedas de paralelepípedo, 16 árvores volumétricas e bancos de praça.
+  * **Setor Sul (Boulevard Gastronômico):** Restaurantes, bistrô com toldos listrados e mesas ao ar livre.
+  * **Setor Sudeste (Posto e Serviços):** Posto de combustível com 4 bombas, letreiro neon e loja de conveniência.
+  * **Setor Leste (Torres Skyline):** Edifícios residenciais de 38 a 44 metros de altura.
+  * **Horizonte Distante (X = ±92):** Arranha-céus ao longe compondo a silhueta metropolitana em 360°.
+  * **Avenidas Longas de 240 Metros:** Retas amplas ideais para arrancadas e perseguições veiculares sem esbarrar em edifícios.
+
 * **Gráficos 3D de Alto Padrão (Three.js PBR):**
   * Iluminação física com sombras suaves (`PCFSoftShadowMap`).
   * Pós-processamento cinematográfico com brilho noturno (`UnrealBloomPass`) e Tone Mapping (`ACESFilmicToneMapping`).
-  * Ciclo Dia/Noite contínuo de 24 horas simuladas com acendimento automático de postes e janelas de edifícios ao anoitecer.
-  * Clima dinâmico: Sol, Chuva (sistema de partículas em Object Pooling), Tempestade com relâmpagos estroboscópicos e trovões, e Neblina volumétrica.
+  * Ciclo Dia/Noite contínuo de 24 horas simuladas com iluminação noturna urbana estilo cyberpunk (luz ambiente ciano `0.45`, luar azulado `0.75` e céu azul índigo `#0f172a`, **eliminando escuridão total**).
+  * Postes de rua e janelas dos edifícios acendem automaticamente ao anoitecer.
+  * Clima dinâmico: Sol, Chuva (partículas em Object Pooling), Tempestade com relâmpagos estroboscópicos e trovões, e Neblina volumétrica.
 
-* **Cidade Viva e Autônoma:**
-  * Bairro central planejado: Banco Central, Hospital com heliponto, Delegacia de polícia, Posto com letreiro neon, Restaurante/Café e Praça Central arborizada com chafariz e bancos.
-  * Trânsito inteligente de veículos: Sedans, esportivos, viaturas policiais com giroflex estroboscópico duplo (azul/vermelho) e ambulâncias.
-  * NPCs articulados com animação procedural de passos e rotina diária real (trabalho, compras, alimentação no bistrô, lazer na praça e descanso em casa).
+* **Física de Veículos e Trânsito Inteligente:**
+  * Frota de sedans, carros esportivos, viaturas policiais e ambulâncias.
+  * **Semáforos Reais:** Carros civis freiam suavemente e param antes da faixa quando o sinal está vermelho ou amarelo.
+  * **Distância de Segurança:** Detecção frontal a 8,5m que impede colisões e empilhamento de carros na mesma faixa.
+  * **Atropelamento Físico com Ragdoll:** Carros em velocidade (> 5 m/s) que atingirem pedestres arremessam o NPC a 2,8m de distância; o cidadão cai de costas no asfalto (`state = 'KNOCKED_DOWN'`), sons de pneu cantando e buzina tocam e uma ambulância é despachada na hora para o socorro!
 
-* **Interatividade com o TikTok LIVE:**
-  * **Seguidores viram Moradores Permanentes:** Crachá 3D suspenso acima da cabeça exibindo `@usuario`, ocupação e dinheiro acumulado.
-  * **Comentários de Comando:** `chuva`, `tempestade`, `sol`, `policia`, `ambulancia`, `corrida`, `festa`, `meteoro`, `apagao`.
-  * **Presentes (Gifts) com Impacto no Mundo:**
-    * 🌹 **Rose:** Gera novo morador ou bonifica morador existente.
-    * 🍩 **Doughnut:** Abastece a economia e mercados da cidade.
-    * 🧢 **Cap:** Despacha viatura policial extra em patrulha.
-    * 🎊 **Confetti:** Inicia festival urbano com queima de fogos na praça central.
-    * 🌌 **Galaxy:** Evento Lendário — Queda cinematográfica de meteoro cortando o céu com onda de choque, cratera e pânico coletivo!
-    * 🦁 **Lion:** Apagão geral na cidade com sirenes de emergência da defesa civil.
-  * **Likes da Transmissão:** Milestones numéricos aceleram a cidade e disparam eventos.
+* **I.A Humana de Pedestres e Moradores da LIVE:**
+  * Personagens 3D modulares com membros articulados e caminhada procedural em velocidade humana (1,6 m/s).
+  * **Navegação Estrita em Calçadas:** Os pedestres contornam os quarteirões pelas calçadas e nunca atravessam por dentro das paredes dos edifícios.
+  * **Comportamento Orgânico:** Pausas de 2 a 4 segundos nas esquinas (olhando para a rua/celular) e capacidade de sentar nos bancos da praça.
+  * **Seguidores viram Moradores:** Crachá 3D flutuante sobre a cabeça exibindo `@usuario`, profissão e dinheiro em tempo real.
+
+* **Eventos Lendários & Épicos Exclusivos:**
+  * ☄️ **Meteoro (Desastre):** Céu vermelho de guerra (`#581c87`), sirene militar da defesa civil, rocha incandescente de 5,5m envolta em labaredas de 7,2m com PointLight de 140m descendo com **câmera de baixo para cima rastreando a bola de fogo em tempo real até o solo**, impacto violento com tremor de tela (screen shake), cratera incandescente, onda de choque dupla e fuga em pânico coletivo!
+  * 🌌 **Galáxia (Fenômeno Cósmico):** Céu azul índigo e violeta (`#0f051d`), gigantesco **portal estelar 3D de 32 metros** com 3 anéis giratórios concêntricos em ciano neon, magenta e ouro, áudio com frequências cósmicas puras (432 Hz, 528 Hz, 639 Hz, 852 Hz), **gravidade zero com os cidadãos levitando de 3 a 6 metros no ar**, chuva de poeira estelar cintilante e bênção de prosperidade no HUD!
+  * 🏎️ **Corrida Clandestina:** Grid de largada lado a lado na avenida central (-52, 0, 2.0 e 5.0), som de pneu cantando (tire screech), velocidade de 95 km/h furando semáforos vermelhos, **viatura policial em perseguição ativa colada na traseira seguindo a pista de asfalto** e câmera Chase Cam.
+  * 🎆 **Festival Metropolitano:** Show coreografado de **14 foguetes multicoloridos** com som de assobio de lançamento (`playFireworkLaunch`), explosão de estrondo com estalo (`playFireworkBurst`) e flashes que iluminam os prédios na cor exata de cada fogo de artifício.
+  * 💡 **Apagão:** Pane elétrica temporária apagando postes e vitrines com sirene de emergência.
+
+* **Áudio Procedural com Compressor de Estúdio:**
+  * Síntese de som via Web Audio API com `DynamicsCompressorNode` para eliminar distorções e ruídos conflitantes.
+  * Função `stopAllSirens()` para desligamento limpo de sirenes ao término dos eventos.
 
 * **Diretor de Câmeras Inteligente:**
-  * Câmera Panorâmica Orbital suave cobrindo os pontos turísticos.
-  * *Chase Cam* dinâmica atrás de viaturas durante perseguições em alta velocidade.
-  * *Follow Cam* acompanhando em terceira pessoa os moradores da LIVE.
-  * *Cinematic Event Cam* para grandes acontecimentos (ex: ângulo olhando para as nuvens durante o meteoro).
-
-* **Event Director (Autonomia 24/7):**
-  * Se a LIVE estiver calma, o sistema orquestra acontecimentos autônomos seguindo um ritmo dramático:
-    $$\text{Calmaria} \longrightarrow \text{Tensão} \longrightarrow \text{Ação / Perseguição} \longrightarrow \text{Clímax} \longrightarrow \text{Calmaria}$$
-
-* **Áudio Procedural Nativo (Web Audio API):**
-  * Síntese de sirene policial modulada, ruído de chuva contínua, explosão profunda de impacto, buzinas e alertas de presentes.
+  * Panorâmica Orbital em órbita ampla de 115 metros cobrindo todos os 9 setores da metrópole.
+  * Chase Cam em perseguições policiais.
+  * Follow Cam em moradores da LIVE.
+  * Cinematic Event Cam para eventos cósmicos e desastres.
 
 * **Banco de Dados Persistente (SQLite Nativo Node 24):**
-  * Histórico de espectadores, dinheiro da cidade, moradores e ranking de apoiadores persistidos localmente em `database/npc_world.sqlite`.
+  * Histórico de espectadores, dinheiro da cidade, moradores e ranking persistidos em `database/npc_world.sqlite`.
 
 ---
 
@@ -53,127 +65,63 @@ Uma simulação 3D viva, visualmente impressionante e com estética de jogo come
 * Node.js v20+ (ou v24) instalado no Windows.
 
 ### Início Rápido (1 Clique no Windows)
-Basta dar duplo clique no arquivo:
+Dê dois cliques no arquivo:
 ```bat
 start.bat
 ```
-Ele iniciará automaticamente o servidor backend na porta **3000** e o frontend 3D na porta **5173**, abrindo o navegador.
+Ele iniciará automaticamente o servidor backend na porta **3000** e o frontend na porta **5173**, abrindo o navegador.
 
-### Início Manual via Terminal
+### Início Manual via Terminal Único:
+```bash
+npm run dev
+```
+Inicia simultaneamente o servidor Express/WebSocket e a engine 3D Vite em um único comando.
 
-1. **Instalar dependências (caso seja a primeira vez):**
-   ```bash
-   npm install
-   ```
-
-2. **Iniciar o Servidor Backend:**
-   ```bash
-   npm run server
-   ```
-
-3. **Iniciar o Frontend 3D (em outro terminal):**
-   ```bash
-   npm run dev:client
-   ```
-
-4. **Acessar no Navegador:**
-   * **Modo Completo / Interativo:** `http://localhost:5173`
-   * **Modo OBS / Stream Limpo:** `http://localhost:5173?mode=stream`
+* **Acesso Completo (com painel interativo):** `http://localhost:5173`
+* **Acesso Modo OBS (Captura Limpa):** `http://localhost:5173?mode=stream`
+* **Acesso Modo OBS Vertical (TikTok 9:16):** `http://localhost:5173?mode=stream&format=vertical`
 
 ---
 
 ## 🎥 Como Configurar no OBS Studio
 
-O jogo foi projetado para captura de alta performance a 60 FPS:
-
-1. No OBS Studio, adicione uma nova fonte do tipo **Navegador (Browser Source)**.
+1. No OBS Studio, adicione uma fonte **Navegador (Browser Source)**.
 2. Defina a **URL**:
-   * Para transmissão vertical padrão TikTok (9:16):
+   * **Formato Vertical (TikTok LIVE - 9:16):**
      * URL: `http://localhost:5173?mode=stream&format=vertical`
      * Largura: `1080`
      * Altura: `1920`
-   * Para transmissão widescreen (16:9):
+   * **Formato Horizontal (Widescreen - 16:9):**
      * URL: `http://localhost:5173?mode=stream`
      * Largura: `1920`
      * Altura: `1080`
-3. Marque a opção **"Controlar áudio via OBS"** se desejar ajustar o volume da cidade separadamente da sua voz.
+3. Marque a opção **"Controlar áudio via OBS"** se desejar dosar o volume do jogo independentemente do microfone.
 4. Taxa de quadros: `60 FPS`.
 
 ---
 
-## 🛠️ Painel Admin / Dev (Testes Locais)
+## 🛠️ Painel Admin / Dev (Teclas e Comandos Rápidos)
 
-Dentro do jogo (no navegador), pressione a tecla **`F2`** no teclado para abrir o **Painel Flutuante de Desenvolvimento**:
+Pressione a tecla **`F2`** no teclado com o jogo aberto no navegador para acessar o painel administrativo:
 
-* **Botão ☄️ Meteoro:** Dispara instantaneamente a queda do meteoro lendário.
-* **Botão 🚨 Polícia:** Despacha viatura policial com sirene aberta.
-* **Botão 🌧️ Chuva / ⛈️ Tempestade:** Altera o clima imediatamente.
-* **Botão 🏎️ Corrida:** Inicia racha clandestino na avenida com perseguição policial.
-* **Botão 🎆 Festival:** Dispara queima de fogos na praça.
-* **Botão 💡 Apagão:** Corta a energia da cidade.
-* **Botão 👤 Morador:** Gera um novo habitante com crachá 3D.
-* **Caixa de Chat Admin:** Digite qualquer comando (`policia`, `chuva`, `meteoro`, `festa`) para testar como se fosse um espectador da LIVE.
-
----
-
-## ⚙️ Conectando na sua LIVE Real do TikTok
-
-O sistema possui um **Simulador Mock Integrado** ativo por padrão (ideal para testar antes de abrir a live).
-
-Para conectar na sua transmissão real:
-1. Abra a sua LIVE no TikTok.
-2. Envie uma requisição POST para o servidor com seu `@usuario`:
-   ```bash
-   curl -X POST http://localhost:3000/api/tiktok/connect -H "Content-Type: application/json" -d "{\"username\": \"@seunome\"}"
-   ```
-3. Se o canal estiver offline, o sistema ativa automaticamente o modo mock de proteção para nunca deixar a transmissão congelada.
-
----
-
-## 📁 Estrutura de Arquivos
-
-```text
-tiktok_live_cidade/
-├── config/
-│   ├── events.json           # Mapeamento de gifts e comandos para eventos do jogo
-│   └── game_config.json      # Configurações de gráficos, limites e simulação
-├── server/
-│   ├── index.js              # Servidor Express, REST API e ciclo central
-│   ├── db/
-│   │   ├── schema.sql        # Tabelas SQLite (viewers, npcs, events, economy)
-│   │   └── database.js       # Operações síncronas de banco de dados
-│   ├── tiktok/
-│   │   ├── sanitizer.js      # Sanitização e mapeamento seguro de dados
-│   │   ├── mock_feeder.js    # Gerador de eventos simulados
-│   │   └── connector.js      # Conexão resiliente com TikTok LIVE
-│   ├── director/
-│   │   ├── chain_events.js   # Gatilhos em cadeia (Roubo -> Perseguição -> Acidente)
-│   │   └── event_director.js # Algoritmo de ritmo e tensão dramática
-│   └── websocket/
-│       └── ws_hub.js         # Broadcast em tempo real para o Three.js
-├── client/
-│   ├── index.html            # Interface Glassmorphism e contêiner 3D
-│   ├── vite.config.js        # Configuração do Vite
-│   └── src/
-│       ├── main.js           # Loop principal da simulação 3D
-│       ├── core/             # Engine Three.js, Bloom Pass e Time delta
-│       ├── world/            # Construtor da cidade, edifícios, props, dia/noite, clima e eventos épicos
-│       ├── entities/         # Veículos com IA de trânsito e NPCs com rotinas
-│       ├── simulation/       # Grafo de caminhos e inteligência FSM
-│       ├── camera/           # Diretor de câmeras dinâmicas e cinematográficas
-│       ├── audio/            # Síntese sonora procedural com Web Audio
-│       ├── ui/               # HUD Glassmorphism, Dev Panel e modo OBS
-│       └── network/          # Cliente WebSocket com reconexão automática
-├── test/                     # Suíte com 35 testes automatizados
-├── start.bat                 # Inicializador em 1 clique para Windows
-└── package.json
-```
+* **🌹 Rosa (Flor):** Simula o presente Rosa do TikTok, gerando/bonificando um morador e focando a câmera nele com crachá 3D.
+* **🌌 Galáxia:** Dispara o fenômeno cósmico exclusivo com o portal estelar 3D no céu, som celestial, gravidade zero com levitação dos NPCs e poeira estelar.
+* **☄️ Meteoro:** Dispara o alarme militar da defesa civil, céu vermelho e a queda da bola de fogo com impacto explosivo e cratera no asfalto.
+* **🚨 Polícia:** Despacha viatura policial com sirene e giroflex estroboscópico.
+* **🌧️ Chuva / ⛈️ Tempestade:** Altera o clima dinâmico com partículas e relâmpagos.
+* **🏎️ Corrida:** Inicia o racha com dois carros esportivos na avenida e a viatura policial colada na perseguição.
+* **🎆 Festival:** Dispara o show de 14 fogos de artifício com iluminação dinâmica nos prédios.
+* **💡 Apagão:** Corta a eletricidade da cidade temporariamente.
+* **👤 Morador:** Gera um novo morador da live com crachá suspenso.
+* **❤️ +50 Likes:** Envia uma rajada de 50 curtidas na transmissão.
+* **☀️/🌙 Dia/Noite:** Alterna instantaneamente entre Dia ensolarado (12:00) e Noite iluminada (21:00).
+* **Caixa de Chat Teste:** Digite comandos como `rosa`, `flor`, `policia`, `chuva`, `meteoro`, `galaxia`, `festa`, `corrida` para simular o chat da live.
 
 ---
 
 ## 🧪 Testes Automatizados
 
-Para rodar todos os 35 testes automatizados de persistência, servidor, WebSocket, eventos e E2E:
+O projeto conta com suíte de 35 testes automatizados cobrindo persistência SQLite, servidor WebSocket, sanitização TikTok, Event Director e integração E2E:
 ```bash
 npm test
 ```

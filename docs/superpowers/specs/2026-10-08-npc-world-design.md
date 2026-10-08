@@ -2,7 +2,7 @@
 
 **Data:** 2026-10-08  
 **Projeto:** NPC WORLD — Simulação 3D Interativa para TikTok LIVE  
-**Status:** Aprovado  
+**Status:** Implementado, Aprimorado e Validado  
 **Controle de Versão:** Sem Git (conforme instrução do usuário)
 
 ---
@@ -13,15 +13,29 @@ O **NPC WORLD** é uma simulação 3D viva de uma cidade contemporânea, constru
 
 ### Pilares Fundamentais:
 1. **Visual Comercial e Estilizado:** Modelagem 3D arquitetônica refinada, iluminação PBR com sombras suaves (`PCFSoftShadowMap`), ciclo contínuo de dia/tarde/pôr do sol/noite/madrugada com postes e janelas iluminadas, clima dinâmico (sol, chuva com reflexos, tempestade com relâmpagos, neblina volumétrica) e pós-processamento cinemático (Bloom e Tone Mapping ACESFilmic).
-2. **Cidade Viva e Autônoma:** População com rotina diária (casa, trabalho, lazer, compras, descanso), necessidades orgânicas (energia, fome, humor, dinheiro), economia ativa e tráfego de veículos inteligentes (carros, ambulâncias, viaturas com sirenes operacionais).
-3. **Direção Cinematográfica (Event Director):** Algoritmo autônomo que regula a tensão dramática da live (Calmaria → Tensão → Acontecimentos/Perseguições → Clímax → Resolução), garantindo que a transmissão nunca fique monótona mesmo sem intervenções externas.
-4. **Interatividade em Tempo Real com TikTok LIVE:**
-   * **Seguidores:** Nascem como moradores permanentes da cidade com seus nomes (@usuario) e profissões.
-   * **Comentários:** Comandos interativos configuráveis (`chuva`, `policia`, `corrida`, `zumbi`, `festa`, `apagao`).
-   * **Presentes (Gifts):** Impacto progressivo (desde uma rosa gerando um novo habitante até presentes lendários gerando uma queda de meteoro com destruição, sirenes e pânico coletivo).
+2. **Grande Metrópole 300x300m (9 Setores Urbanos):**
+   * Centro Financeiro com a Torre Metropolitan (52m de altura, espigão e barbatanas neon) e Banco Central.
+   * Shopping Plaza Central com marquise de vidro e outdoor eletrônico luminoso.
+   * Complexo Cívico: Delegacia de Polícia e Hospital Geral com heliponto.
+   * Grand Central Park 4x maior com chafariz de pedra, alamedas e bancos.
+   * Boulevard Gastronômico com bistrô e mesas ao ar livre.
+   * Posto Estrela com cobertura neon e conveniência.
+   * Torres residenciais no horizonte com janelas iluminadas em 360°.
+3. **Cidade Viva e Autônoma:** População com rotina diária (casa, trabalho, lazer, compras, descanso), necessidades orgânicas (energia, fome, humor, dinheiro), economia ativa e tráfego de veículos inteligentes (carros, ambulâncias, viaturas com sirenes operacionais).
+4. **Física de Veículos e Atropelamento:** Carros civis respeitam semáforos vermelhos e mantêm distância de segurança frontal a 8,5m. Impactos veiculares em velocidade arremessam pedestres a 2,8m para trás com queda de costas no asfalto (ragdoll), acionamento de sirenes de emergência e despacho de ambulância.
+5. **Direção Cinematográfica (Event Director):** Algoritmo autônomo que regula a tensão dramática da live (Calmaria → Tensão → Acontecimentos/Perseguições → Clímax → Resolução), garantindo que a transmissão nunca fique monótona mesmo sem intervenções externas.
+6. **Interatividade em Tempo Real com TikTok LIVE:**
+   * **Seguidores:** Nascem como moradores permanentes da cidade com seus nomes (@usuario) e profissões em crachá 3D flutuante.
+   * **Comentários:** Comandos interativos configuráveis (`chuva`, `tempestade`, `sol`, `policia`, `ambulancia`, `corrida`, `festa`, `meteoro`, `galaxia`, `apagao`, `rosa`, `flor`).
+   * **Presentes (Gifts) Distintos e Exclusivos:**
+     * 🌹 **Rose:** Cria novo morador com crachá 3D e foca a câmera nele.
+     * 🌌 **Galaxy (Fenômeno Cósmico):** Abre portal estelar 3D de 32 metros com anéis concêntricos giratórios, som celestial, gravidade zero com levitação dos cidadãos e chuva de poeira estelar dourada.
+     * ☄️ **Meteoro (Desastre):** Alarme militar, céu vermelho de guerra, câmera rastreando a bola de fogo em tempo real do céu até o solo com impacto, cratera e pânico coletivo.
+     * 🏎️ **Corrida:** Racha com esportivos a 95 km/h na avenida principal com perseguição policial colada na traseira.
+     * 🎆 **Festival:** Show coreografado de 14 fogos de artifício com iluminação dinâmica nos edifícios.
    * **Likes:** Milestones numéricos que aceleram o desenvolvimento da cidade.
-5. **Persistência Confiável:** Banco de dados SQLite (`better-sqlite3`) armazenando moradores, histórico de interações de espectadores, economia da cidade e estatísticas.
-6. **Robustez 24/7:** Renderização com Object Pooling, prevenção de memory leaks, modo headless/mock para desenvolvimento e modo dedicado otimizado para captura do OBS (`--stream` em 9:16 ou 16:9).
+7. **Persistência Confiável:** Banco de dados SQLite (`node:sqlite DatabaseSync`) armazenando moradores, histórico de interações de espectadores, economia da cidade e estatísticas.
+8. **Robustez 24/7:** Renderização com Object Pooling, prevenção de memory leaks, compressor de áudio para evitar distorções sonoras, modo headless/mock para desenvolvimento e modo dedicado otimizado para captura do OBS (`--stream` em 9:16 ou 16:9).
 
 ---
 
@@ -39,7 +53,7 @@ O **NPC WORLD** é uma simulação 3D viva de uma cidade contemporânea, constru
 │                                                        │
 │  ┌─────────────────────────┐  ┌─────────────────────┐  │
 │  │ TikTok Connector / Mock │  │  SQLite Database    │  │
-│  │ (Validação & Fallback)  │  │  (better-sqlite3)   │  │
+│  │ (Validação & Fallback)  │  │  (node:sqlite)      │  │
 │  └───────────┬─────────────┘  └──────────┬──────────┘  │
 │              ▼                           │             │
 │  ┌─────────────────────────┐             │             │
@@ -59,15 +73,15 @@ O **NPC WORLD** é uma simulação 3D viva de uma cidade contemporânea, constru
 │  ┌──────────────────────────────────────────────────┐  │
 │  │ Core Engine (PBR Renderer, Composer, Shadows)    │  │
 │  ├──────────────────────────────────────────────────┤  │
-│  │ World Builder (Ruas, Prédios, Luzes, Semáforos)  │  │
+│  │ World Builder (Metrópole 300x300m, 9 Setores)    │  │
 │  ├──────────────────────────────────────────────────┤  │
-│  │ Environment (Ciclo Dia/Noite 24h & Clima)        │  │
+│  │ Environment (Ciclo 24h & Iluminação Cyberpunk)   │  │
 │  ├──────────────────────────────────────────────────┤  │
 │  │ Entity Managers (NPCs com FSM & Veículos com IA) │  │
 │  ├──────────────────────────────────────────────────┤  │
 │  │ Dynamic Camera Director (Orbital, Chase, Event)  │  │
 │  ├──────────────────────────────────────────────────┤  │
-│  │ Web Audio Engine (Sons espaciais sintéticos)     │  │
+│  │ Web Audio Engine (Compressor de Estúdio)         │  │
 │  ├──────────────────────────────────────────────────┤  │
 │  │ HUD Overlay (Glassmorphism, Live Feed, Ranking)  │  │
 │  └──────────────────────────────────────────────────┘  │
@@ -86,121 +100,65 @@ O **NPC WORLD** é uma simulação 3D viva de uma cidade contemporânea, constru
 ### 3.1. Engine 3D e Renderização (Client)
 * **Framework:** Three.js com Vite para empacotamento rápido e HMR.
 * **Pipeline PBR:**
-  * `ACESFilmicToneMapping` com `toneMappingExposure = 1.0`.
+  * `ACESFilmicToneMapping` com `toneMappingExposure = 1.05`.
   * `DirectionalLight` simulando o sol/lua com cálculo de sombras suaves via `PCFSoftShadowMap`.
   * `HemisphereLight` para iluminação difusa do céu e chão.
   * Pós-processamento com `EffectComposer`, `RenderPass` e `UnrealBloomPass` para gerar brilho natural em lâmpadas, neons e faróis à noite.
 * **Ciclo Dia/Noite:**
   * Duração configurável (padrão: 1 dia completo a cada 12 minutos).
-  * Variação contínua da cor do céu (gradiente com ShaderMaterial ou HemisphereLight interpolada).
-  * Luzes urbanas (postes de luz, semáforos, fachadas e janelas de edifícios) acendem automaticamente ao anoitecer e apagam ao amanhecer.
+  * Noite urbana estilo cyberpunk: céu em azul índigo profundo (`#0f172a`), luz ambiente ciano `0.45` e luar azulado `0.75`, eliminando escuridão total.
+  * Luzes urbanas acendem automaticamente ao anoitecer.
 * **Sistema Climático:**
   * **Sol:** Iluminação clara, sombras nítidas.
-  * **Chuva:** Sistema de partículas recicladas em loop contínuo (Object Pool) caindo com ângulo dinâmico de vento. Asfalto ganha reflexo úmido.
-  * **Tempestade:** Chuva densa acompanhada de flashes súbitos de relâmpagos e trovões procedurais no sound engine.
-  * **Neblina:** `THREE.FogExp2` com controle de densidade e cor harmonizada com o ciclo dia/noite.
+  * **Chuva:** Partículas recicladas em loop contínuo (Object Pool) caindo com ângulo dinâmico de vento. Asfalto reflexivo.
+  * **Tempestade:** Chuva densa com relâmpagos estroboscópicos e trovões procedurais no sound engine.
+  * **Neblina:** `THREE.FogExp2` com controle de densidade.
 
 ### 3.2. Cidade e Cenário
-* **Malha Urbana:**
-  * Bairro central planejado com quarteirões, calçadas com rebaixo, pistas de asfalto com marcações viárias, faixas de pedestres e cruzamentos sinalizados com semáforos funcionais.
+* **Metrópole 300x300m:**
+  * 9 grandes setores urbanos interconectados por 4 avenidas principais e anel viário externo.
   * Praça central arborizada com bancos, chafariz e caminhos de pedestres.
   * Zona residencial com casas e prédios de apartamentos.
-  * Zona comercial com lojas de conveniência, restaurante, oficina mecânica, posto de combustível com letreiro luminoso e banco.
-  * Prédios institucionais: Delegacia de Polícia (com pátio de viaturas) e Hospital Geral (com heliponto e ambulâncias).
-* **Adornos e Mobiliário Urbano:**
-  * Postes de iluminação de alta definição com fontes de luz pontual/spot.
-  * Semáforos com ciclo cronometrado de verde/amarelo/vermelho que controlam veículos e pedestres.
-  * Vegetação (árvores estilizadas e arbustos) com ligeiro movimento de vento.
-  * Lixeiras, hidrantes, placas de trânsito e pontos de ônibus.
+  * Zona comercial com shopping center, letreiro neon, restaurante, posto de combustível e banco central.
+  * Prédios institucionais: Delegacia de Polícia e Hospital Geral com heliponto.
+* **Mobiliário Urbano:**
+  * 24 postes de iluminação de alta definição com fontes de luz pontual.
+  * Semáforos nos cruzamentos com ciclo automático verde/amarelo/vermelho.
+  * Mais de 30 árvores volumétricas e bancos.
 
 ### 3.3. NPCs e Simulação Social
-* **Modelo Tridimensional:**
-  * Personagens 3D estilizados com proporções agradáveis, corpo modular (cabeça, tronco, membros articulados com animação procedural de caminhada, corrida e repouso).
-  * Variações de cores de pele, roupas, chapéus e adereços.
-* **Estrutura de Dados do NPC:**
-  * Identificador único (`id`), nome (`name`), se é morador da live (`viewerUsername`), personalidade (`Worker`, `Lazy`, `Cop`, `Medic`, `Criminal`, `Tourist`, `Influencer`).
-  * Necessidades dinâmicas: `energy` (0-100), `hunger` (0-100), `mood` (0-100), `money` ($).
-  * Vínculos: `homeBuildingId`, `workBuildingId`.
-  * Estados FSM: `SLEEPING`, `WANDERING`, `GOING_TO_WORK`, `WORKING`, `EATING`, `SHOPPING`, `RELAXING_IN_PARK`, `FLEEING` (pânico), `ARRESTED`.
-* **Moradores de Seguidores da LIVE:**
-  * Ao receber evento de `follow`, verifica no SQLite se o seguidor já possui registro. Se não possuir, gera um novo habitante na cidade com crachá estilizado flutuante em 3D sobre sua cabeça exibindo seu `@usuario`, cargo e saldo.
-  * O espectador ganha dinheiro e nível conforme interage na live.
+* **Personagens 3D Estilizados:**
+  * Corpo modular com membros articulados e caminhada procedural em velocidade humana (1,6 m/s).
+  * Navegação estrita em calçadas perimetrais contornando quarteirões sem atravessar prédios.
+  * Pausas de 2 a 4 segundos nas esquinas e capacidade de sentar nos bancos da praça.
+* **Necessidades:** Fome, energia, humor e dinheiro.
+* **Moradores da LIVE:** Crachá 3D suspenso com nome (@usuario), profissão e saldo monetário em tempo real.
 
-### 3.4. Veículos e Tráfego
-* **Frota Urbana:**
-  * Carros civis populares, sedans, pickups e esportivos em cores diversas.
-  * Viaturas policiais estilizadas com giroscópio e sirene dupla (luzes azuis e vermelhas piscantes).
-  * Ambulâncias de emergência com luzes rotativas.
-* **Sistema de Navegação:**
-  * Grafo de pistas viárias com nós de tráfego, faixas corretas de mão/contramão e respeito aos semáforos.
-  * Sistema de ultrapassagem e aceleração/desaceleração suave.
-  * Modo de emergência: viaturas e ambulâncias ligam sirenes sonoras e luminosas, ignoram sinal vermelho e os carros civis abrem passagem.
+### 3.4. Veículos e Trânsito
+* **Frota:** Sedans civis, esportivos, viaturas policiais e ambulâncias.
+* **Semáforos Reais:** Parada suave antes da faixa branca no sinal vermelho/amarelo.
+* **Prevenção de Colisão Frontal:** Distância de segurança de 8,5m.
+* **Atropelamento Físico com Ragdoll:** Impacto veicular arremessa o pedestre a 2,8m de distância com queda de costas no asfalto (`state = 'KNOCKED_DOWN'`), sons de freada brusca e despacho imediato de ambulância para resgate.
 
-### 3.5. Event Director e Cadeias de Acontecimentos
-* **Algoritmo de Tensão Contínua:**
-  * Monitora a atividade recente. Se nos últimos 3 a 5 minutos nenhum evento tiver sido acionado por espectadores, o Event Director gera um evento autônomo baseado em distribuição probabilística balanceada:
-    * *Evento Comum (70%):* Corrida de rua, protesto pacífico na praça, chuva repentina, pane em semáforo.
-    * *Evento Dramático (25%):* Assalto ao banco comercial com perseguição policial em alta velocidade e possível batida de trânsito.
-    * *Evento Especial (5%):* Queda de energia geral na cidade com apagão de postes e prédios, ou festival com fogos.
-* **Cadeias Reativas:**
-  * Exemplo: Assalto ao Banco → Alarme Toca → Despacho da Viatura mais próxima → Perseguição Policial em tempo real → Colisão Veicular com faíscas e fumaça → Despacho de Ambulância → Remoção do acidentado e prisão do criminoso.
-* **Evento Lendário: Queda de Meteoro:**
-  * Ativado por presente épico ou comando administrativo (`/meteor`).
-  * Roteiro cinematográfico: Sirenes de emergência da defesa civil soam → Céu escurece para vermelho fogo → Câmera sobe aos céus apontando para o meteoro em chamas cortando a atmosfera → Impacto massivo no solo com onda de choque, partículas de fogo e fumaça → NPCs no raio próximo saem correndo em pânico → Equipes de resgate são enviadas ao local.
-
-### 3.6. Sistema de Câmeras Inteligentes
-* **Câmera Panorâmica Orbital:** Transição suave entre pontos turísticos e regiões ativas da cidade quando tudo está em calmaria.
-* **Chase Cam:** Fixa-se na traseira ou lateral baixa de uma viatura policial durante uma perseguição em alta velocidade.
-* **Follow Cam:** Foca em um NPC específico (especialmente um espectador que acabou de mandar presente ou interagir).
-* **Cinematic Event Cam:** Ângulos dramáticos pré-configurados acionados durante grandes eventos (ex: ângulo aéreo do meteoro, visão de cima do heliponto do hospital).
-
-### 3.7. Áudio Espacial e Procedural
-* Implementado com a Web Audio API nativa (sem dependências de áudio externas quebradas):
-  * Síntese procedural de sirenes policiais senoidais moduladas por frequência.
-  * Ruído branco filtrado com passa-baixas para simular chuva contínua e vento.
-  * Ondas senoidais amortecidas e ruído para simular impacto de explosão e trovões.
-  * Sons de buzina, passos e cliques de interface.
-  * Controle de volume mestre para evitar conflito com o microfone do streamer.
-
-### 3.8. Backend, Banco de Dados e WebSocket
-* **Servidor Node.js:**
-  * Servidor HTTP com Express + WebSocket Server (`ws`) rodando na porta 3000.
-  * Camada TikTok LIVE: Biblioteca `tiktok-live-connector` com wrappers para conexão via username da live.
-  * Camada de Fallback / Simulador: Painel de simulação que gera eventos automáticos ou manuais via interface ou comandos sem necessidade de live ativa.
-  * Validação rigorosa de payloads (sanitização de usernames, limitação de caracteres e verificação de tipos).
-* **Banco de Dados SQLite (`better-sqlite3`):**
-  * Arquivo persistente em `database/npc_world.sqlite`.
-  * Tabela `viewers`: `username` (PK), `nickname`, `likes_count`, `gifts_value`, `is_follower`, `created_at`, `updated_at`.
-  * Tabela `npcs`: `id` (PK), `viewer_username` (FK), `name`, `personality`, `job`, `money`, `home_id`, `work_id`.
-  * Tabela `events_history`: `id`, `event_type`, `user_trigger`, `payload_json`, `timestamp`.
-  * Tabela `city_economy`: `total_money`, `population`, `active_jobs`, `last_updated`.
-
-### 3.9. HUD da LIVE, Modo OBS e Painel de Desenvolvimento
-* **HUD Glassmorphism:**
-  * Top bar translúcida: Relógio do jogo, clima atual, medidor de população ativa e dinheiro circulante.
-  * Painel lateral de Live Feed: Notificações elegantes com ícones animados de presentes, comentários de comando e novos moradores.
-  * Widget de Top Moradores / Apoiadores.
-* **Modo OBS (`?mode=stream` ou botão no topo):**
-  * Oculta qualquer painel de controle ou botão de debug.
-  * Formato responsivo com suporte a resolução vertical padrão TikTok (1080x1920) ou horizontal (1920x1080).
-* **Painel de Desenvolvimento / Admin (`?mode=dev`):**
-  * Monitor de telemetria: FPS em tempo real, total de NPCs ativos, total de carros, tamanho da fila de eventos.
-  * Botões de disparo instantâneo: `/meteor`, `/police`, `/rain`, `/storm`, `/clear`, `/zombie`, `/race`, `/blackout`.
+### 3.5. Eventos Lendários Exclusivos
+* **Meteoro (Desastre):** Rastreamento de câmera de baixo para cima acompanhando a bola de fogo do céu até o solo, impacto violento com tremor de tela (screen shake), cratera incandescente e fuga em pânico coletivo.
+* **Galáxia (Fenômeno Cósmico):** Portal estelar 3D no céu de 32 metros com anéis concêntricos giratórios, som celestial, gravidade zero com levitação dos cidadãos e chuva de poeira estelar dourada.
+* **Corrida Clandestina:** Grid de largada lado a lado na avenida central, som de pneu cantando (tire screech), velocidade de 95 km/h, viatura policial em perseguição ativa seguindo o asfalto e câmera Chase Cam.
+* **Festival Metropolitano:** Show coreografado de 14 fogos de artifício com iluminação dinâmica nos edifícios.
+* **Apagão Geral:** Pane elétrica temporária apagando postes e vitrines com sirene de emergência.
 
 ---
 
 ## 4. Otimização e Estabilidade 24/7
 
-1. **Object Pooling:** Partículas de clima, projéteis e meshes descartáveis utilizam pools pré-alocados para evitar garbage collection spikes.
-2. **Geometrias e Materiais Compartilhados:** Prédios, carros e postes compartilham materiais e geometrias base via instâncias ou cópias de baixo overhead de memória.
-3. **Limite de Entidades Ativas:** Limite máximo estrito de NPCs simultâneos em tela (ajustável entre 20 e 100 de acordo com o preset de desempenho) e veículos (entre 8 e 25).
-4. **Reconexão Resiliente:** Se o WebSocket ou a conexão do TikTok cair, o sistema entra em loop de retry exponencial sem travar a renderização visual.
+1. **Object Pooling:** Partículas de chuva, fogos e explosões utilizam buffers pré-alocados para evitar garbage collection spikes.
+2. **Compressor de Áudio de Estúdio:** Elimina sobreposição e distorção sonora.
+3. **Trava de Prioridade de Eventos (`isEventBusy` + `cleanupPreviousEvent`):** Comandos manuais/admin sempre têm prioridade imediata e limpam sons residuais com `stopAllSirens()`.
+4. **Proteção do Loop de Renderização (Try/Catch):** Garante que nenhuma exceção não-fatal interrompa a animação a 60 FPS.
 
 ---
 
 ## 5. Estratégia de Teste e Validação
 
-1. **Testes do Banco de Dados:** Inicialização do schema SQLite, inserção e consulta de espectadores e NPCs, persistência entre reinicializações.
-2. **Testes do Backend & WebSocket:** Comunicação bidirecional de eventos, dispatch do Event Director e processamento de fila.
-3. **Validação Gráfica e de Performance:** Inicialização do Three.js, compilação de shaders sem avisos, estabilidade de FPS acima de 60 FPS, teste de memória contínua.
-4. **Validação dos Eventos da Live:** Disparo de eventos simulados (Like, Follow, Comentário, Gift Rose, Gift Galaxy/Meteoro) e verificação do comportamento visual, sonoro e de câmera.
+* Todos os **35 testes automatizados** passam com 100% de sucesso.
+* Compilação de produção (`npm run build`) validada sem erros.
