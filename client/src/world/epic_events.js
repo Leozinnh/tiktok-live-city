@@ -16,7 +16,7 @@ export class EpicEventManager {
     this.shockwaves = [];
     this.particles = [];
     this.screenShake = 0;
-    this.isEventBusy = false; // Lock to prevent audio confusion and overlapping actions
+    this.isEventBusy = false;
 
     this.particleTexture = this.createCircleTexture();
   }
@@ -40,6 +40,27 @@ export class EpicEventManager {
     return new THREE.CanvasTexture(canvas);
   }
 
+  cleanupPreviousEvent() {
+    if (this.activeMeteor) {
+      if (this.scene) this.scene.remove(this.activeMeteor.group);
+      this.activeMeteor = null;
+    }
+    if (this.activeGalaxy) {
+      if (this.scene) {
+        this.scene.remove(this.activeGalaxy.portalGroup);
+        this.scene.remove(this.activeGalaxy.dustPoints);
+      }
+      this.activeGalaxy.levitatingNpcs.forEach(item => {
+        if (item.npc && item.npc.group) item.npc.group.position.y = item.initialY;
+      });
+      this.activeGalaxy = null;
+    }
+    if (this.soundEngine) {
+      this.soundEngine.stopAllSirens();
+    }
+    this.isEventBusy = false;
+  }
+
   showBanner(title, desc, durationMs = 5000) {
     if (typeof document === 'undefined') return;
     const banner = document.getElementById('epic-banner');
@@ -58,65 +79,70 @@ export class EpicEventManager {
   }
 
   triggerMeteorStrike(targetPos = { x: 0, z: 0 }) {
-    if (this.isEventBusy) return null;
+    // Clean up any ongoing action so admin clicks ALWAYS execute immediately
+    this.cleanupPreviousEvent();
     this.isEventBusy = true;
 
     this.showBanner('☄️ ALERTA MÁXIMO: METEORO EM ROTA DE COLISÃO!', 'Impacto iminente no centro da cidade! Procurem abrigo!');
 
-    // Dramatic sky shift
+    // Dramatic Crimson War Sky
     if (this.scene) {
-      this.scene.background = new THREE.Color('#450a0a');
+      this.scene.background = new THREE.Color('#581c87');
       if (this.scene.fog) {
-        this.scene.fog.color = new THREE.Color('#450a0a');
+        this.scene.fog.color = new THREE.Color('#581c87');
         this.scene.fog.density = 0.002;
       }
     }
 
-    if (this.cameraDirector) {
-      this.cameraDirector.triggerCinematicShot(
-        new THREE.Vector3(targetPos.x + 55, 45, targetPos.z + 55),
-        new THREE.Vector3(targetPos.x, 15, targetPos.z),
-        10
-      );
-    }
-
     if (this.soundEngine) {
-      this.soundEngine.stopAllSirens();
       this.soundEngine.playSiren(true);
     }
 
-    // Build Large Meteor Mesh with Fire Aura
+    // Trajectory coordinates: Starts in front of camera view at height 95m, hurtling towards downtown (0, 0)
+    const startX = targetPos.x - 30;
+    const startY = 95;
+    const startZ = targetPos.z - 30;
+
+    // Camera: Positioned at an ideal low angle looking directly up at the incoming meteor
+    if (this.cameraDirector) {
+      this.cameraDirector.triggerCinematicShot(
+        new THREE.Vector3(targetPos.x + 38, 16, targetPos.z + 38),
+        new THREE.Vector3(startX, startY, startZ),
+        10,
+        true // Snap camera immediately so viewer sees the meteor from frame 1!
+      );
+    }
+
+    // Build Large Glowing Meteor
     const meteorGroup = new THREE.Group();
 
-    const rockGeo = new THREE.DodecahedronGeometry(5.0, 1);
+    // Jagged Rock Core
+    const rockGeo = new THREE.DodecahedronGeometry(5.5, 1);
     const rockMat = new THREE.MeshStandardMaterial({
       color: 0x1f130e,
-      emissive: 0xff4500,
-      emissiveIntensity: 3.5,
-      roughness: 0.8,
-      metalness: 0.2
+      emissive: 0xff3b00,
+      emissiveIntensity: 4.0,
+      roughness: 0.8
     });
     const rock = new THREE.Mesh(rockGeo, rockMat);
     meteorGroup.add(rock);
 
-    const fireGeo = new THREE.SphereGeometry(6.5, 16, 16);
+    // Incandescent Fire Aura Sphere
+    const fireGeo = new THREE.SphereGeometry(7.2, 16, 16);
     const fireMat = new THREE.MeshBasicMaterial({
       color: 0xffaa00,
       transparent: true,
-      opacity: 0.75,
+      opacity: 0.8,
       blending: THREE.AdditiveBlending
     });
     const fireSphere = new THREE.Mesh(fireGeo, fireMat);
     meteorGroup.add(fireSphere);
 
-    const meteorLight = new THREE.PointLight(0xff6600, 4.0, 100, 1.2);
+    // Intense PointLight lighting up the buildings below
+    const meteorLight = new THREE.PointLight(0xff5500, 6.0, 140, 1.2);
     meteorGroup.add(meteorLight);
 
-    const startX = targetPos.x - 45;
-    const startY = 160;
-    const startZ = targetPos.z - 45;
     meteorGroup.position.set(startX, startY, startZ);
-
     this.scene.add(meteorGroup);
 
     this.activeMeteor = {
@@ -124,7 +150,7 @@ export class EpicEventManager {
       start: new THREE.Vector3(startX, startY, startZ),
       target: new THREE.Vector3(targetPos.x, 0, targetPos.z),
       progress: 0,
-      speed: 0.16,
+      speed: 0.20, // ~5.0 seconds of breathtaking, visible descent!
       impactTriggered: false,
       tailTimer: 0
     };
@@ -138,16 +164,17 @@ export class EpicEventManager {
       this.soundEngine.stopAllSirens();
     }
 
-    this.screenShake = 1.2;
+    this.screenShake = 1.4;
 
     if (this.npcManager) {
-      this.npcManager.triggerPanic(pos, 75);
+      this.npcManager.triggerPanic(pos, 80);
     }
 
+    // Expanding Ground Shockwave Rings
     for (let r = 0; r < 2; r++) {
-      const ringGeo = new THREE.RingGeometry(1.0, 3.5, 32);
+      const ringGeo = new THREE.RingGeometry(1.0, 4.0, 32);
       const ringMat = new THREE.MeshBasicMaterial({
-        color: r === 0 ? 0xff3b00 : 0xffaa00,
+        color: r === 0 ? 0xff3b00 : 0xffcc00,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.95,
@@ -157,14 +184,15 @@ export class EpicEventManager {
       shockwave.rotation.x = -Math.PI / 2;
       shockwave.position.set(pos.x, 0.2 + r * 0.05, pos.z);
       this.scene.add(shockwave);
-      this.shockwaves.push({ mesh: shockwave, scale: 1, opacity: 1, speed: 22 + r * 8 });
+      this.shockwaves.push({ mesh: shockwave, scale: 1, opacity: 1, speed: 25 + r * 10 });
     }
 
-    const craterGeo = new THREE.CylinderGeometry(7.0, 5.5, 0.6, 20);
+    // Glowing Impact Crater
+    const craterGeo = new THREE.CylinderGeometry(8.0, 6.0, 0.6, 20);
     const craterMat = new THREE.MeshStandardMaterial({
-      color: 0x0f0b08,
-      emissive: 0x991b1b,
-      emissiveIntensity: 1.8,
+      color: 0x0a0705,
+      emissive: 0xef4444,
+      emissiveIntensity: 2.2,
       roughness: 0.9
     });
     const crater = new THREE.Mesh(craterGeo, craterMat);
@@ -190,7 +218,7 @@ export class EpicEventManager {
   }
 
   spawnExplosionCloud(x, y, z) {
-    const count = 90;
+    const count = 100;
     const geo = new THREE.BufferGeometry();
     const pos = new Float32Array(count * 3);
     const vels = [];
@@ -200,13 +228,13 @@ export class EpicEventManager {
       pos[i * 3 + 1] = y;
       pos[i * 3 + 2] = z;
 
-      const speed = Math.random() * 20 + 8;
+      const speed = Math.random() * 22 + 10;
       const angle = Math.random() * Math.PI * 2;
-      const elevation = Math.random() * 0.9 + 0.1;
+      const elevation = Math.random() * 0.9 + 0.15;
 
       vels.push(
         Math.cos(angle) * speed,
-        elevation * speed * 1.5,
+        elevation * speed * 1.6,
         Math.sin(angle) * speed
       );
     }
@@ -215,7 +243,7 @@ export class EpicEventManager {
 
     const mat = new THREE.PointsMaterial({
       color: 0xff5500,
-      size: 4.5,
+      size: 5.5,
       map: this.particleTexture || null,
       transparent: true,
       opacity: 1,
@@ -225,11 +253,11 @@ export class EpicEventManager {
 
     const pCloud = new THREE.Points(geo, mat);
     this.scene.add(pCloud);
-    this.particles.push({ mesh: pCloud, vels, life: 1.5 });
+    this.particles.push({ mesh: pCloud, vels, life: 1.8 });
   }
 
   triggerStreetRace() {
-    if (this.isEventBusy) return null;
+    this.cleanupPreviousEvent();
     this.isEventBusy = true;
 
     this.showBanner('🏎️ CORRIDA CLANDESTINA DETECTADA!', 'Dois esportivos disputando racha na avenida principal!');
@@ -240,7 +268,6 @@ export class EpicEventManager {
     }
 
     if (this.soundEngine) {
-      this.soundEngine.stopAllSirens();
       this.soundEngine.playTireScreech();
     }
 
@@ -276,7 +303,7 @@ export class EpicEventManager {
       this.cameraDirector.focusOnVehicle(car1, 14);
     }
 
-    // Police Cruiser dispatched
+    // Police Cruiser dispatched in hot pursuit
     setTimeout(() => {
       const cop = this.vehicleManager.spawnPoliceCruiser();
       if (cop) {
@@ -304,7 +331,7 @@ export class EpicEventManager {
   }
 
   triggerGalaxyEvent(targetPos = { x: 0, z: 0 }) {
-    if (this.isEventBusy) return null;
+    this.cleanupPreviousEvent();
     this.isEventBusy = true;
 
     this.showBanner('🌌 EVENTO LENDÁRIO: FENÔMENO GALÁXIA!', 'Vórtice estelar aberto no céu! Gravidade zero ativada!');
@@ -318,14 +345,13 @@ export class EpicEventManager {
     }
 
     if (this.soundEngine) {
-      this.soundEngine.stopAllSirens();
       this.soundEngine.playCosmicWarp();
     }
 
     if (this.cameraDirector) {
       this.cameraDirector.triggerCinematicShot(
         new THREE.Vector3(targetPos.x + 40, 25, targetPos.z + 40),
-        new THREE.Vector3(targetPos.x, 35, targetPos.z),
+        new THREE.Vector3(targetPos.x, 45, targetPos.z),
         10
       );
     }
@@ -440,12 +466,12 @@ export class EpicEventManager {
   }
 
   triggerCityFestival() {
-    if (this.isEventBusy) return null;
+    this.cleanupPreviousEvent();
     this.isEventBusy = true;
 
     this.showBanner('🎆 FESTIVAL METROPOLITANO!', 'Grande queima de fogos multicoloridos e celebração urbana!');
 
-    const parkPos = { x: 0, z: 0 }; // Grand central park center
+    const parkPos = { x: 24, z: -24 };
 
     if (this.cameraDirector) {
       this.cameraDirector.triggerCinematicShot(
@@ -456,11 +482,9 @@ export class EpicEventManager {
     }
 
     if (this.soundEngine) {
-      this.soundEngine.stopAllSirens();
       this.soundEngine.playNotification();
     }
 
-    // Multi-stage choreographed fireworks show (14 bursts across 10 seconds)
     const bursts = [
       { delay: 300, color: 0x38bdf8, ox: -12, oz: -8, y: 38 },
       { delay: 900, color: 0xf43f5e, ox: 12, oz: 8, y: 44 },
@@ -469,7 +493,6 @@ export class EpicEventManager {
       { delay: 3200, color: 0xa855f7, ox: 16, oz: -14, y: 46 },
       { delay: 4000, color: 0xfb923c, ox: -8, oz: -18, y: 42 },
       { delay: 4800, color: 0x06b6d4, ox: 10, oz: 16, y: 50 },
-      // Grand Finale Barrage (7 rockets firing almost simultaneously)
       { delay: 5800, color: 0xf43f5e, ox: -15, oz: 0, y: 52 },
       { delay: 6000, color: 0x38bdf8, ox: 15, oz: 0, y: 54 },
       { delay: 6200, color: 0xfacc15, ox: 0, oz: -15, y: 56 },
@@ -504,7 +527,6 @@ export class EpicEventManager {
     const colors = [0x38bdf8, 0xf43f5e, 0xfacc15, 0x4ade80, 0xa855f7, 0xfb923c, 0xffffff];
     const color = fireworkColor || colors[Math.floor(Math.random() * colors.length)];
 
-    // Flash of light illuminating surrounding buildings
     const burstLight = new THREE.PointLight(color, 4.5, 90, 1.5);
     burstLight.position.set(x, y, z);
     this.scene.add(burstLight);
@@ -538,7 +560,7 @@ export class EpicEventManager {
 
     const mat = new THREE.PointsMaterial({
       color,
-      size: 4.2, // Big vibrant starburst sparks!
+      size: 4.2,
       map: this.particleTexture || null,
       transparent: true,
       opacity: 1,
@@ -557,7 +579,7 @@ export class EpicEventManager {
   }
 
   triggerBlackout(durationSeconds = 10) {
-    if (this.isEventBusy) return null;
+    this.cleanupPreviousEvent();
     this.isEventBusy = true;
 
     this.showBanner('💡 APAGÃO GERAL NA CIDADE!', 'Pane na subestação elétrica! Luzes apagadas.');
@@ -567,7 +589,6 @@ export class EpicEventManager {
     }
 
     if (this.soundEngine) {
-      this.soundEngine.stopAllSirens();
       this.soundEngine.playSiren(true);
       setTimeout(() => this.soundEngine.stopAllSirens(), 4000);
     }
@@ -587,7 +608,7 @@ export class EpicEventManager {
   }
 
   triggerBankRobbery() {
-    if (this.isEventBusy) return null;
+    this.cleanupPreviousEvent();
     this.isEventBusy = true;
 
     this.showBanner('🚨 ALARME: ROUBO AO BANCO!', 'Viatura da polícia em código 3 despachada!');
@@ -606,7 +627,6 @@ export class EpicEventManager {
         setTimeout(() => this.cameraDirector.focusOnVehicle(police, 8), 1000);
       }
       if (this.soundEngine) {
-        this.soundEngine.stopAllSirens();
         this.soundEngine.playSiren(true);
         setTimeout(() => {
           this.soundEngine.stopAllSirens();
@@ -622,7 +642,6 @@ export class EpicEventManager {
   }
 
   update(deltaTime) {
-    // Screen Shake effect
     if (this.screenShake > 0) {
       this.screenShake -= deltaTime * 1.5;
       if (this.cameraDirector && this.cameraDirector.camera) {
@@ -631,7 +650,7 @@ export class EpicEventManager {
       }
     }
 
-    // Update active meteor
+    // Update active meteor & track camera lookAt
     if (this.activeMeteor) {
       this.activeMeteor.progress += this.activeMeteor.speed * deltaTime;
       const p = this.activeMeteor.progress;
@@ -640,6 +659,11 @@ export class EpicEventManager {
         this.activeMeteor.group.position.lerpVectors(this.activeMeteor.start, this.activeMeteor.target, p);
         this.activeMeteor.group.rotation.x += deltaTime * 4;
         this.activeMeteor.group.rotation.y += deltaTime * 5;
+
+        // Camera tracks the meteor dynamically down from the sky!
+        if (this.cameraDirector) {
+          this.cameraDirector.targetLookAt.copy(this.activeMeteor.group.position);
+        }
 
         this.activeMeteor.tailTimer += deltaTime;
         if (this.activeMeteor.tailTimer > 0.08) {
@@ -654,7 +678,7 @@ export class EpicEventManager {
       }
     }
 
-    // Update active Galaxy Cosmic Portal & Zero-G Levitation
+    // Update active Galaxy Cosmic Portal
     if (this.activeGalaxy) {
       const g = this.activeGalaxy;
       g.timer += deltaTime;
@@ -726,7 +750,7 @@ export class EpicEventManager {
       const positions = fw.mesh.geometry.attributes.position.array;
       for (let j = 0; j < fw.vels.length / 3; j++) {
         positions[j * 3] += fw.vels[j * 3] * deltaTime;
-        positions[j * 3 + 1] += fw.vels[j * 3 + 1] * deltaTime - 5 * deltaTime; // gravity
+        positions[j * 3 + 1] += fw.vels[j * 3 + 1] * deltaTime - 5 * deltaTime;
         positions[j * 3 + 2] += fw.vels[j * 3 + 2] * deltaTime;
       }
       fw.mesh.geometry.attributes.position.needsUpdate = true;
